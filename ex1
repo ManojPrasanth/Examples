@@ -44,7 +44,21 @@ first_value(e.name) over
   e.mgr_id=m.emp_id
   order by emp_id;
   
-  
-  
+ 
+//insertion format o/p
+
+  select '('||emp_id ||''''||name||''''  
+','||
+case when dept_id is NOT NULL then dept_id :: text else 'NULL' end
+||','||
+case when mgr_id is NOT NULL then mgr_id :: text else 'NULL' end
+||','||salary||','||''''||
+joining_date||''''','''''||
+case when termination_date is NOT NULL then termination_date :: text else 'NULL' end
+||''''||')'
+from employee;
+
+
+
   
   
