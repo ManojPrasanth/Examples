@@ -1,0 +1,50 @@
+//link
+
+https://www.postgresql.org/docs/8.2/static/functions-math.html
+
+
+  
+select t.manager_name,t.name as emp_name,t.joining_date 
+from(
+  select m.name as manager_name,e.name,e.joining_date,rank() over (partition by m.name order by e.joining_date desc)        
+  from employee e         
+  inner join employee m on            e.mgr_id=m.emp_id       
+  group by m.name,e.name,e.joining_date
+) t where rank=1;
+
+select t.manager_name,t.name as emp_name,t.joining_date 
+from(
+  select m.name as manager_name,e.name,e.joining_date,FIRST_VALUE(e.name) over (partition by m.name order by e.joining_date desc)        
+  from employee e         
+  inner join employee m on            e.mgr_id=m.emp_id       
+  group by m.name,e.name,e.joining_date
+) t where rank=1;
+
+
+
+select distinct m.emp_id mgr_id,m.name as mgr_name,
+mgr_emp.mgr_lat_emp_id from
+employee e inner join employee m on e.mgr_id = m.emp_id
+inner join (
+    
+    select distinct on(mgr_id) mgr_id,emp_id as mgr_lat_emp_id from employee  
+                  where mgr_id is NOT NULL 
+    order by mgr_id,joining_date desc
+  
+  )mgr_emp on m.emp_id = mgr_emp.mgr_id
+
+// crct
+
+select e.emp_id,e.name as employ,e.dept_id,e.joining_date,m.name as mgr,
+first_value(e.name) over 
+  ( partition by e.dept_id 
+    order by e.joining_date) as first_empl_dept,
+    count(m.emp_id) over (partition by m.emp_id) as Mgr_Empl_count
+  from employee e left join employee m on
+  e.mgr_id=m.emp_id
+  order by emp_id;
+  
+  
+  
+  
+  
