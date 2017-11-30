@@ -50,7 +50,7 @@ psql
 
 \z or \dp 			// to "display privileges"
 
-
+----
 -----------------------------------------------------------------------------------
 
 psql -l 															// to list all the databases.
